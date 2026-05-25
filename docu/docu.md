@@ -326,105 +326,77 @@ Astro NO aporta demasiado para este tipo de app interactiva.
 
 # Backend
 
-## Recomendado
+## Actual (MVP)
 
-### Opción simple
+### Convex (Backend-as-a-Service)
 
-- Node.js + Express
+Convex combina en un solo servicio:
 
-### Mejor opción
-
-- Node.js + Fastify
+- base de datos (document-relacional)
+- serverless functions (queries + mutations)
+- reactive queries (tiempo real sin WebSocket manual)
+- file storage (archivos temporales)
+- crons (limpieza automática)
+- type-safety end-to-end (TypeScript nativo)
 
 ---
 
 ## Motivos
 
-Fastify:
-
-- más rápido
-- menos consumo
-- mejor escalabilidad
-
----
-
-# Realtime
-
-## Recomendado
-
-- Socket.IO
+- sin servidor que mantener
+- queries reactivas = reemplazan Socket.IO automáticamente
+- file storage incluido sin configuración extra
+- no pausa proyectos inactivos (serverless puro, se paga por uso)
 
 ---
 
-## Uso
+## Stack final
 
-Permite:
-
-- login QR instantáneo
-- sincronización entre dispositivos
-- aparición automática de archivos
-
----
-
-# Base de Datos
-
-## Inicial
-
-### SQLite
-
-Para:
-
-- MVP
-- pruebas
-- desarrollo rápido
+```txt
+Frontend:  Vite + React + TailwindCSS (CDN)
+Backend:   Convex (BaaS)
+Auth:      Code-based (sin login, solo código de sesión)
+Storage:   Convex File Storage
+Tiempo real: Convex Reactive Queries (built-in)
+```
 
 ---
 
-## Escalable
+# Persistencia y Ciclo de Vida
 
-### PostgreSQL
+## Archivos
 
-Para:
-
-- producción
-- múltiples usuarios
-- escalabilidad
-
----
-
-# Storage de Archivos
-
-## NO recomendado
-
-Guardar archivos:
-
-- directamente en el VPS
-- en disco local del servidor
-
-Problemas:
-
-- espacio
-- escalabilidad
-- backups
-- caídas
+| Evento | Comportamiento |
+|---|---|
+| Subida exitosa | Se guarda en Convex File Storage |
+| Cierre del navegador | El archivo sigue en el servidor |
+| Descarga desde otro dispositivo | Se elimina del servidor (`removeFile`) |
+| Pasadas 24h sin descargar | Cron de limpieza lo elimina |
+| Todos los archivos descargados | La sesión queda vacía (no se borra automáticamente) |
 
 ---
 
-## Recomendado
+## Sesiones
 
-### Cloudflare R2
+| Característica | Detalle |
+|---|---|
+| Creación | `createSession` genera código único de 6 chars |
+| Unión | `validateSession` verifica que el código exista |
+| Múltiples receptores | Todos los que ingresen el mismo código ven los mismos archivos |
+| Primera descarga | El archivo se elimina para todos (no hay contador de descargas) |
+| Expiración | Cleanup automático cada 1h elimina sesiones >24h |
 
-Ventajas:
+---
 
-- barato/gratis
-- rápido
-- escalable
-- simple
+## Comportamiento multi-usuario
 
-Alternativas:
+- Un solo **sender** (quien crea la sesión desde Dashboard)
+- Múltiples **receivers** pueden unirse con el mismo código
+- Todos los receivers ven los archivos en tiempo real
+- **El primero que descarga un archivo lo elimina para todos** (sin contador de descargas)
+- No hay límite de sesiones concurrentes en el free tier (1,000 sesiones simultáneas)
 
-- AWS S3
-- Supabase Storage
+> ⚠️ Consideración de diseño: Si se necesita que N personas descarguen el mismo archivo, habría que agregar un contador de descargas o copia por receiver. Actualmente no está implementado.
 
 ---
 
