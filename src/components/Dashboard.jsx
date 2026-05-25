@@ -150,7 +150,7 @@ export default function Dashboard({ onLogout }) {
             Código de sesión
           </p>
           <div className="rounded-xl bg-white p-4">
-            <QRCodeSVG value={`${window.location.origin}/?code=${sessionCode}`} size={140} bgColor="#ffffff" fgColor="#000000" />
+            <QRCodeSVG value={`https://vanish-61a9.vercel.app/?code=${sessionCode}`} size={140} bgColor="#ffffff" fgColor="#000000" />
           </div>
           <p className="text-2xl font-mono font-bold tracking-widest text-white">
             {sessionCode}
