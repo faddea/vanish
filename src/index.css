@@ -1,0 +1,52 @@
+html {
+  scroll-behavior: smooth;
+  background: #000;
+}
+
+body {
+  margin: 0;
+  color: #a1a1aa;
+  background: #000;
+}
+
+::selection {
+  background: #fff;
+  color: #000;
+}
+
+.code-input {
+  width: 42px;
+  height: 52px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 500;
+  background: #121212;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  outline: none;
+  text-transform: uppercase;
+  transition: all 0.15s ease;
+  border-radius: 0;
+}
+
+.code-input:focus {
+  border-color: #fff;
+  background: #1a1a1a;
+}
+
+.code-input.error {
+  border-color: #ef4444;
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.05);
+  animation: shake 0.3s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0) }
+  25% { transform: translateX(-4px) }
+  75% { transform: translateX(4px) }
+}
+
+.drop-zone {
+  transition: all 0.15s ease;
+}
