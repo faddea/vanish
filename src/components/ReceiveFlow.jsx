@@ -86,6 +86,7 @@ export default function ReceiveFlow({ initialCode = '', onClose }) {
     if (!session) {
       setError('Código inválido. Verificá e intentá de nuevo.')
       setValidating(false)
+      setStep('code')
       inputRefs.current.forEach(ref => ref?.classList.add('error'))
       setTimeout(() => inputRefs.current.forEach(ref => ref?.classList.remove('error')), 1200)
       return
@@ -191,6 +192,11 @@ export default function ReceiveFlow({ initialCode = '', onClose }) {
               <div className="h-8 w-8 animate-spin rounded-full border-2 border-zinc-700 border-t-white" />
               <p className="text-sm text-zinc-400">Verificando código...</p>
             </div>
+            <p className="mt-12 text-xs text-zinc-600">
+              Si no funciona desde acá, probá escaneando el QR{' '}
+              <br className="sm:hidden" />
+              desde la cámara nativa de tu celular.
+            </p>
           </div>
         )}
 
