@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 
-export default function Nav({ onStart, onAbout }) {
+export default function Nav({ onStart, onAbout, onHome }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const panelRef = useRef(null)
   const firstFocusableRef = useRef(null)
@@ -29,10 +29,10 @@ export default function Nav({ onStart, onAbout }) {
   return (
     <>
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between border-b border-zinc-900 bg-black/50 px-6 py-4 backdrop-blur-md sm:px-10">
-        <div className="flex items-center gap-3">
+        <button onClick={onHome} className="flex cursor-pointer items-center gap-3">
           <img src="/icon.jpeg" alt="" className="h-8 w-8 rounded-lg" />
           <span className="text-sm font-medium text-white">Vanish</span>
-        </div>
+        </button>
 
       <div className="hidden items-center gap-6 sm:flex">
         <button onClick={onAbout} className="cursor-pointer text-sm text-zinc-500 transition-colors hover:text-zinc-300">

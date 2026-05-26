@@ -150,6 +150,11 @@ export default function About() {
                 </tbody>
               </table>
             </div>
+            <p className="mt-4 text-xs text-zinc-600">
+              ⚡ Vanish se puede usar desde el navegador sin instalar nada. Si querés,
+              podés agregarlo a la pantalla de inicio como una app (PWA) para acceder
+              más rápido, pero no es necesario.
+            </p>
           </Section>
 
           <Section title="¿Es seguro?">
@@ -180,9 +185,8 @@ export default function About() {
 
           <Section title="¿Preguntas?">
             <p>
-              Vanish es un proyecto abierto y en evolución. Si tenés dudas, sugerencias,
-              o querés reportar un problema, podés abrir un issue en nuestro repositorio
-              de GitHub o escribirnos directamente.
+              Vanish está en evolución constante. Si tenés dudas, sugerencias
+              o querés reportar un problema, escribinos directamente.
             </p>
             <p className="text-zinc-600">
               Este producto está pensado especialmente para entornos educativos:

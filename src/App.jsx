@@ -73,7 +73,7 @@ function App() {
   if (view === 'about') {
     return (
       <>
-        <Nav onStart={() => navigate('dashboard')} onAbout={() => navigate('about')} />
+        <Nav onStart={() => navigate('dashboard')} onAbout={() => navigate('about')} onHome={() => navigate('home')} />
         <About />
       </>
     )
@@ -81,7 +81,7 @@ function App() {
 
   return (
     <>
-      <Nav onStart={() => navigate('dashboard')} onAbout={() => navigate('about')} />
+      <Nav onStart={() => navigate('dashboard')} onAbout={() => navigate('about')} onHome={() => navigate('home')} />
       <Hero onStart={() => navigate('dashboard')} onReceive={(code) => navigate('receive', { code })} />
       <HowItWorks />
       <PhilosophyBanner />
