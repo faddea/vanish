@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react'
+import { useDevice } from '../hooks/useDevice'
+import QrScanner from './QrScanner'
 
 export default function Hero({ onStart, onReceive }) {
+  const device = useDevice()
   const [loaded, setLoaded] = useState(false)
+  const [showScanner, setShowScanner] = useState(false)
   const [progress, setProgress] = useState(0)
   const [dots, setDots] = useState(0)
   const [scanRow, setScanRow] = useState(0)
@@ -74,13 +78,34 @@ export default function Hero({ onStart, onReceive }) {
           >
             Subir archivo
           </button>
-          <button
-            onClick={onReceive}
-            className="cursor-pointer underline underline-offset-4 decoration-neutral-600 px-8 py-3 font-medium text-zinc-400 transition-all hover:border-zinc-600 hover:text-white active:scale-[0.97]"
-          >
-            Ya tengo un codigo para recibir
-          </button>
+          {device === 'mobile' ? (
+            <button
+              onClick={() => setShowScanner(true)}
+              className="cursor-pointer underline underline-offset-4 decoration-neutral-600 px-8 py-3 font-medium text-zinc-400 transition-all hover:border-zinc-600 hover:text-white active:scale-[0.97]"
+            >
+              📷 Escanear QR
+            </button>
+          ) : (
+            <button
+              onClick={onReceive}
+              className="cursor-pointer underline underline-offset-4 decoration-neutral-600 px-8 py-3 font-medium text-zinc-400 transition-all hover:border-zinc-600 hover:text-white active:scale-[0.97]"
+            >
+              Ya tengo un código para recibir
+            </button>
+          )}
         </div>
+
+        {showScanner && (
+          <QrScanner
+            onDetected={(code) => {
+              const match = code.match(/[?&]code=([A-Z0-9]{6})/i) || code.match(/([A-Z0-9]{6})/)
+              const c = match ? match[1] : code
+              window.history.replaceState(null, '', `/?code=${c}`)
+              onReceive()
+            }}
+            onClose={() => setShowScanner(false)}
+          />
+        )}
 
         <div className={`mt-12 w-full max-w-3xl transition-all duration-700 delay-200 ${loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
           <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-6 shadow-2xl backdrop-blur-2xl">

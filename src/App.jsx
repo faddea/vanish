@@ -6,6 +6,7 @@ import PhilosophyBanner from './components/PhilosophyBanner'
 import CtaFooter from './components/CtaFooter'
 import Dashboard from './components/Dashboard'
 import ReceiveFlow from './components/ReceiveFlow'
+import About from './components/About'
 import './App.css'
 
 function App() {
@@ -23,9 +24,18 @@ function App() {
     return <ReceiveFlow initialCode={codeFromUrl} onClose={() => setView('home')} />
   }
 
+  if (view === 'about') {
+    return (
+      <>
+        <Nav onStart={() => setView('dashboard')} onAbout={() => setView('about')} />
+        <About />
+      </>
+    )
+  }
+
   return (
     <>
-      <Nav onStart={() => setView('dashboard')} />
+      <Nav onStart={() => setView('dashboard')} onAbout={() => setView('about')} />
       <Hero onStart={() => setView('dashboard')} onReceive={() => setView('receive')} />
       <HowItWorks />
       <PhilosophyBanner />

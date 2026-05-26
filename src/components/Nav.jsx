@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 
-export default function Nav({ onStart }) {
+export default function Nav({ onStart, onAbout }) {
   const [menuOpen, setMenuOpen] = useState(false)
   const panelRef = useRef(null)
   const firstFocusableRef = useRef(null)
@@ -34,10 +34,10 @@ export default function Nav({ onStart }) {
           <span className="text-sm font-medium text-white">Vanish</span>
         </div>
 
-        <div className="hidden items-center gap-6 sm:flex">
-          <a href="#" className="text-sm text-zinc-500 transition-colors hover:text-zinc-300">
-            Cómo funciona
-          </a>
+      <div className="hidden items-center gap-6 sm:flex">
+        <button onClick={onAbout} className="cursor-pointer text-sm text-zinc-500 transition-colors hover:text-zinc-300">
+          Cómo funciona
+        </button>
           <button
             onClick={onStart}
             className="cursor-pointer rounded-lg bg-white px-4 py-2 text-sm font-medium text-black transition-all hover:bg-zinc-200"
@@ -82,13 +82,12 @@ export default function Nav({ onStart }) {
             </button>
 
             <div className="mt-12 flex flex-col gap-6">
-              <a
-                href="#"
-                onClick={() => setMenuOpen(false)}
-                className="text-lg text-zinc-400 transition-colors hover:text-zinc-200"
-              >
-                Cómo funciona
-              </a>
+            <button
+              onClick={() => { setMenuOpen(false); onAbout() }}
+              className="cursor-pointer text-left text-lg text-zinc-400 transition-colors hover:text-zinc-200"
+            >
+              Cómo funciona
+            </button>
               <button
                 onClick={handleStart}
                 className="cursor-pointer rounded-lg bg-white px-4 py-3 text-center text-sm font-medium text-black transition-all hover:bg-zinc-200"
