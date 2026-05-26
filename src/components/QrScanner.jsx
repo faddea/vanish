@@ -88,7 +88,7 @@ export default function QrScanner({ onDetected, onClose }) {
 
   function confirm() {
     if (detected) {
-      onDetected(detected.replace(/[^A-Z0-9]/gi, '').toUpperCase())
+      onDetected(detected)
     }
   }
 
