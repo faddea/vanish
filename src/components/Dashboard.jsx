@@ -31,16 +31,6 @@ export default function Dashboard({ onLogout }) {
     createSession().then(setSessionCode)
   }, [createSession])
 
-  const uploadFile = useCallback(async (file) => {
-    if (!sessionCode) return
-    const uploadUrl = await generateUploadUrl()
-    const formData = new FormData()
-    formData.append('file', file)
-    const res = await fetch(uploadUrl, { method: 'POST', body: formData })
-    const { storageId } = await res.json()
-    await saveFile({ sessionCode, name: file.name, size: file.size, type: file.type, storageId })
-  }, [sessionCode, generateUploadUrl, saveFile])
-
   async function handleFileDrop(e) {
     e.preventDefault()
     setDragging(false)
@@ -69,7 +59,33 @@ export default function Dashboard({ onLogout }) {
     window.open(file.url, '_blank')
   }
 
-  if (!sessionCode) return null
+  const [uploading, setUploading] = useState(false)
+
+  const uploadFile = useCallback(async (file) => {
+    if (!sessionCode) return
+    setUploading(true)
+    try {
+      const uploadUrl = await generateUploadUrl()
+      const formData = new FormData()
+      formData.append('file', file)
+      const res = await fetch(uploadUrl, { method: 'POST', body: formData })
+      const { storageId } = await res.json()
+      await saveFile({ sessionCode, name: file.name, size: file.size, type: file.type, storageId })
+    } finally {
+      setUploading(false)
+    }
+  }, [sessionCode, generateUploadUrl, saveFile])
+
+  if (!sessionCode) {
+    return (
+      <section className="relative z-10 flex min-h-dvh items-center justify-center bg-black">
+        <div className="flex flex-col items-center gap-4">
+          <div className="h-8 w-8 animate-spin rounded-full border-2 border-zinc-700 border-t-white" />
+          <p className="text-sm text-zinc-500">Iniciando sesión...</p>
+        </div>
+      </section>
+    )
+  }
 
   return (
     <section className="relative z-10 flex min-h-dvh flex-col bg-black">
@@ -100,14 +116,16 @@ export default function Dashboard({ onLogout }) {
               dragging ? 'border-white bg-white/5' : 'border-zinc-800'
             }`}
           >
-            <div className="mb-2 text-4xl">{device === 'mobile' ? '📤' : '📥'}</div>
+            <div className="mb-2 text-4xl">{uploading ? '⏳' : (device === 'mobile' ? '📤' : '📥')}</div>
             <p className="text-sm font-medium text-white">
-              {device === 'mobile' ? 'Subí tus archivos' : 'Esperando archivos...'}
+              {uploading ? 'Subiendo...' : (device === 'mobile' ? 'Subí tus archivos' : 'Esperando archivos...')}
             </p>
             <p className="mt-1 text-xs text-zinc-600">
-              {device === 'mobile'
-                ? 'Arrastrá o seleccioná un archivo'
-                : 'También podés arrastrar archivos acá'}
+              {uploading
+                ? 'El archivo se está transfiriendo'
+                : (device === 'mobile'
+                  ? 'Arrastrá o seleccioná un archivo'
+                  : 'También podés arrastrar archivos acá')}
             </p>
             <input id="dash-file-input" type="file" multiple className="hidden" onChange={handleFileInput} />
           </div>

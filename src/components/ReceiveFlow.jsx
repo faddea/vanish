@@ -185,6 +185,15 @@ export default function ReceiveFlow({ initialCode = '', onClose }) {
       </header>
 
       <main className="mx-auto flex w-full max-w-5xl flex-1 px-6 py-16">
+        {step === 'validating' && (
+          <div className="flex w-full flex-col items-center justify-center">
+            <div className="flex flex-col items-center gap-4">
+              <div className="h-8 w-8 animate-spin rounded-full border-2 border-zinc-700 border-t-white" />
+              <p className="text-sm text-zinc-400">Verificando código...</p>
+            </div>
+          </div>
+        )}
+
         {step === 'code' && (
           <div className="flex w-full flex-col items-center justify-center">
             <div className="w-full max-w-md border border-zinc-800 bg-zinc-900/30 p-8">
