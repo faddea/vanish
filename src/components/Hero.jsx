@@ -100,8 +100,7 @@ export default function Hero({ onStart, onReceive }) {
             onDetected={(code) => {
               const match = code.match(/[?&]code=([A-Z0-9]{6})/i) || code.match(/([A-Z0-9]{6})/)
               const c = match ? match[1] : code
-              window.history.replaceState(null, '', `/?code=${c}`)
-              onReceive()
+              onReceive(c)
             }}
             onClose={() => setShowScanner(false)}
           />
